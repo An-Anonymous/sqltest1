@@ -1,0 +1,11 @@
+SELECT 
+    p.Business,
+    COALESCE(CONCAT(p.StreetNo, ''), '') AS StreetNo,
+    COALESCE(p.Street, '') AS Street,
+    COALESCE(p.PostCode, '') AS PostCode,
+    COALESCE(SUM(CASE WHEN f.FootfallCount IS NULL THEN 0 ELSE f.FootfallCount END), 0) AS FootfallCount,
+    COALESCE(bd.BusinessDetail, '') AS BusinessDetail
+FROM Premises p
+LEFT JOIN Footfall f ON p.PremisesID = f.PremisesID
+LEFT JOIN BusinessDetails bd ON p.Business = bd.Business
+GROUP BY p.Business, StreetNo, Street, PostCode, BusinessDetail;
